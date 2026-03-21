@@ -1,0 +1,25 @@
+{
+  "name": "quelora-wp-integration",
+  "version": "3.16.0",
+  "description": "Advanced distributed community system integration for WordPress.",
+  "main": "build/index.js",
+  "files": [
+    "quelora.php",
+    "build",
+    "assets",
+    "languages"
+  ],
+  "scripts": {
+    "start": "wp-scripts start",
+    "build": "wp-scripts build",
+    "postbuild": "npm run build:i18n",
+    "build:i18n": "node ./scripts/compile-mo.cjs",
+    "plugin-zip": "wp-scripts plugin-zip"
+  },
+  "author": "Quelora Architecture Team",
+  "license": "GPL-2.0-or-later",
+  "devDependencies": {
+    "@wordpress/scripts": "^27.0.0",
+    "gettext-parser": "^6.0.0"
+  }
+}

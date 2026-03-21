@@ -1,0 +1,12 @@
+# Dependencias
+node_modules/
+
+# Builds
+build/*
+dist/*
+assets/*
+
+# Mantener estructura
+!build/.gitkeep
+!dist/.gitkeep
+!assets/.gitkeep

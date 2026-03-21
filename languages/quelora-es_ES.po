@@ -1,0 +1,154 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Quelora Integration 3.0.14\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-21 00:00+0000\n"
+"PO-Revision-Date: 2025-03-21 00:00+0000\n"
+"Last-Translator: Quelora Team\n"
+"Language-Team: Spanish\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Quelora i18n Compiler\n"
+
+#: quelora.php
+msgid "Quelora Configuration"
+msgstr "Configuración de Quelora"
+
+#: quelora.php
+msgid "Quelora"
+msgstr "Quelora"
+
+#: quelora.php
+msgid "Quelora Integration Settings"
+msgstr "Ajustes de Integración de Quelora"
+
+#: quelora.php
+msgid "Enable Quelora by Default"
+msgstr "Activar Quelora por defecto"
+
+#: quelora.php
+msgid "Activate Quelora on all posts unless explicitly disabled per-post."
+msgstr "Activa Quelora en todas las entradas salvo que se deshabilite explícitamente en cada entrada."
+
+#: quelora.php
+msgid "When enabled, Quelora assets are injected on every singular post that has not been explicitly toggled off in the editor sidebar."
+msgstr "Cuando está activo, los recursos de Quelora se inyectan en cada entrada singular que no haya sido desactivada explícitamente en la barra lateral del editor."
+
+#: quelora.php
+msgid "Dashboard URL (Backend)"
+msgstr "URL del Dashboard (Backend)"
+
+#: quelora.php
+msgid "Base embed URL. The post identifier will be appended automatically (e.g. %s)."
+msgstr "URL base de incrustación. El identificador de la entrada se añadirá automáticamente (p. ej. %s)."
+
+#: quelora.php
+msgid "Header Widget Selector"
+msgstr "Selector del Widget de Cabecera"
+
+#: quelora.php
+msgid "CSS selector for the header container. Default: %1$s. Injects: %2$s"
+msgstr "Selector CSS del contenedor de cabecera. Por defecto: %1$s. Inyecta: %2$s"
+
+#: quelora.php
+msgid "Article Meta Selector"
+msgstr "Selector Meta del Artículo"
+
+#: quelora.php
+msgid "CSS selector inside each &lt;article&gt;. Default: %1$s. Injects: %2$s"
+msgstr "Selector CSS dentro de cada &lt;article&gt;. Por defecto: %1$s. Inyecta: %2$s"
+
+#: quelora.php
+msgid "Asset Source"
+msgstr "Origen de los Assets"
+
+#: quelora.php
+msgid "Local Package (Included)"
+msgstr "Paquete Local (Incluido)"
+
+#: quelora.php
+msgid "External CDN"
+msgstr "CDN Externo"
+
+#: quelora.php
+msgid "CDN JS URL"
+msgstr "URL del JS (CDN)"
+
+#: quelora.php
+msgid "CDN CSS URL"
+msgstr "URL del CSS (CDN)"
+
+#: quelora.php
+msgid "Configuration Script Payload"
+msgstr "Payload del Script de Configuración"
+
+#: quelora.php
+msgid "Raw JavaScript injected as an ES Module in the <head>. Only active on posts with Quelora enabled."
+msgstr "JavaScript en bruto inyectado como ES Module en el <head>. Solo activo en entradas con Quelora habilitado."
+
+#: quelora.php
+msgid "Enable WordPress SSO Token"
+msgstr "Habilitar Token SSO de WordPress"
+
+#: quelora.php
+msgid "Generate a secure identity token and share it with Quelora for seamless, password-free login."
+msgstr "Genera un token de identidad seguro y lo comparte con Quelora para un inicio de sesión sin contraseña."
+
+#: quelora.php
+msgid "When enabled, Quelora receives only the authenticated user's display name and email address from your WordPress site to identify them. User passwords, session cookies, and WordPress credentials are never shared. A cryptographic signature is used to verify each user's identity — Quelora relies exclusively on this signature without accessing or inspecting WordPress sessions. Disable this option to allow Quelora to manage user registration and authentication independently."
+msgstr "Cuando está activo, Quelora recibe únicamente el nombre de usuario y la dirección de correo electrónico del usuario autenticado desde tu sitio WordPress para identificarlo. Las contraseñas, cookies de sesión y credenciales de WordPress nunca se comparten. Se utiliza una firma criptográfica para verificar la identidad de cada usuario — Quelora confía exclusivamente en esta firma sin acceder ni inspeccionar las sesiones de WordPress. Desactiva esta opción para permitir que Quelora gestione el registro y la autenticación de usuarios de forma independiente."
+
+#: quelora.php
+msgid "SSO Secret Key"
+msgstr "Clave Secreta SSO"
+
+#: quelora.php
+msgid "HMAC-SHA256 secret used to sign the SSO JWT. Must match the secret configured in the Quelora backend. Leave empty to disable SSO token injection."
+msgstr "Clave secreta HMAC-SHA256 utilizada para firmar el JWT SSO. Debe coincidir con la clave configurada en el backend de Quelora. Déjala vacía para deshabilitar la inyección del token SSO."
+
+#: quelora.php
+msgid "SSO Token TTL (seconds)"
+msgstr "TTL del Token SSO (segundos)"
+
+#: quelora.php
+msgid "How long the SSO token remains valid in seconds. Default: %s (1 hour)."
+msgstr "Tiempo en segundos durante el que el token SSO permanece válido. Por defecto: %s (1 hora)."
+
+#: src/index.js
+msgid "Quelora Community"
+msgstr "Comunidad Quelora"
+
+#: src/edit.js
+msgid "Quelora Interaction Node"
+msgstr "Nodo de Interacción Quelora"
+
+#: src/edit.js
+msgid "This node is strictly active. The frontend assets and Quelora module configurations will be automatically injected on this page. Configure the interaction mechanics for this specific post directly in the Quelora Distributed Backend."
+msgstr "Este nodo está estrictamente activo. Los recursos del frontend y las configuraciones del módulo Quelora se inyectarán automáticamente en esta página. Configura los mecanismos de interacción para esta entrada directamente en el Backend Distribuido de Quelora."
+
+#: src/edit.js
+msgid "Configure Node in Quelora System"
+msgstr "Configurar Nodo en el Sistema Quelora"
+
+#: src/sidebar.js
+msgid "Enable Quelora"
+msgstr "Activar Quelora"
+
+#: src/sidebar.js
+msgid "Quelora scripts and styles are active for this post."
+msgstr "Los scripts y estilos de Quelora están activos para esta entrada."
+
+#: src/sidebar.js
+msgid "Quelora is disabled for this post."
+msgstr "Quelora está desactivado para esta entrada."
+
+#: src/sidebar.js
+msgid "Configure in Quelora"
+msgstr "Configurar en Quelora"
+
+#: src/sidebar.js
+msgid "Official reference:"
+msgstr "Referencia oficial:"

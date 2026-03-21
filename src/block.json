@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "quelora/main",
+	"version": "1.0.0",
+	"title": "Quelora Interaction Node",
+	"category": "widgets",
+	"icon": "admin-comments",
+	"description": "Acts as a logical marker to inject the Quelora distributed community system onto this specific page.",
+	"supports": {
+		"html": false,
+		"multiple": false,
+		"reusable": false,
+		"customClassName": false
+	},
+	"textdomain": "quelora",
+	"editorScript": "file:./index.js"
+}
