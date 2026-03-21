@@ -4,15 +4,22 @@
  * Manages the `_quelora_active` post meta and provides the interface
  * for opening the Quelora configuration backend.
  *
- * The activation state resolves with the following precedence:
- *  1. Explicit `_quelora_active` meta saved on the post.
- *  2. Global default (`window.QueloraEditorConfig.defaultActive`) injected
- *     by the PHP layer from the plugin settings page.
+ * ## Activation state — source of truth
+ *
+ * `_quelora_active` is registered in PHP via `register_post_meta` with its
+ * `default` set to the current value of the `quelora_default_active` option.
+ * This means the WordPress REST API returns the correct global default for
+ * posts that have never been explicitly saved with this meta key, making the
+ * editor store value always accurate and directly usable without any
+ * client-side resolution logic.
+ *
+ * `isActive` is therefore simply `!! meta._quelora_active` — no fallback,
+ * no isDirty checks, no materialization effects required.
  *
  * The dashboard URL is constructed as:
- *  `{dashboardUrl}{nodeId}?title=...&description=...&tags=...&category=...&language=...&link=...`
+ *  `{dashboardUrl}/{nodeId}?title=...&description=...&tags=...&category=...&language=...&link=...`
  * where `nodeId` is derived from `post-{postId}` using the shared SHA-256
- * truncation contract, and all hydration parameters are passed as GET params.
+ * truncation contract.
  *
  * @author Quelora Architecture Team
  */
@@ -22,44 +29,15 @@ import { ToggleControl, Button, ExternalLink } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Returns the effective Quelora activation state for the current post.
- *
- * When the post has never been explicitly saved with a `_quelora_active`
- * meta value, WordPress returns `false` as the registered default —
- * indistinguishable from an intentional "off". This function resolves
- * that ambiguity by checking the globally injected `defaultActive` flag
- * from `window.QueloraEditorConfig`.
- *
- * A post is considered "explicitly set" once the editor has dispatched
- * an `editPost` action for `_quelora_active`, which marks the post as dirty.
- * Before that first explicit interaction, the global default governs.
- *
- * @param {Object}  meta     - The current edited post meta object.
- * @param {boolean} isDirty  - Whether the post has unsaved changes.
- * @return {boolean} The resolved activation state.
- */
-function resolveActiveState( meta, isDirty ) {
-	const globalDefault =
-		window?.QueloraEditorConfig?.defaultActive === true;
-
-	if ( ! isDirty && meta._quelora_active === false ) {
-		return globalDefault;
-	}
-
-	return !! meta._quelora_active;
-}
-
-/**
  * Derives a 24-character hexadecimal node identifier from a raw input string.
  *
- * This function mirrors the backend identifier contract exactly:
- *  1. If the input is already a 24-char lowercase hex string, it is returned as-is.
- *  2. Otherwise, the input is encoded as UTF-8, hashed with SHA-256 via the
- *     Web Crypto API, converted to a hex string, and truncated to 24 characters.
+ * Contract:
+ *  1. If the input is already a 24-char lowercase hex string, returns it as-is.
+ *  2. Otherwise, encodes as UTF-8, hashes with SHA-256, truncates to 24 chars.
  *
  * Input convention: `post-{postId}` (e.g. `post-34`).
  *
- * @param {string|number} input - Raw post identifier (e.g. `post-34`).
+ * @param {string|number} input - Raw post identifier.
  * @return {Promise<string>} Resolves to a 24-character lowercase hex node ID.
  */
 async function toNodeId( input ) {
@@ -102,21 +80,13 @@ function resolveDescription( excerpt, title ) {
  * Builds the Quelora dashboard embed URL for a given post, including all
  * hydration parameters as URL-encoded GET query parameters.
  *
- * Parameters appended:
- *  - `title`       — Post title.
- *  - `description` — Post excerpt or fallback (max 1000 chars).
- *  - `tags`        — Comma-separated list of tag names.
- *  - `category`    — Comma-separated list of category names.
- *  - `language`    — WordPress locale string (e.g. `en_US`).
- *  - `link`        — Post permalink.
- *
- * @param {number|string} postId     - The current WordPress post ID.
- * @param {Object}        postData   - Hydration data resolved from the editor store.
- * @param {string}        postData.title       - Post title.
- * @param {string}        postData.excerpt     - Raw post excerpt (may contain HTML).
- * @param {string[]}      postData.tags        - Array of tag name strings.
- * @param {string[]}      postData.categories  - Array of category name strings.
- * @param {string}        postData.permalink   - Post permalink URL.
+ * @param {number|string} postId    - The current WordPress post ID.
+ * @param {Object}        postData  - Hydration data resolved from the editor store.
+ * @param {string}        postData.title      - Post title.
+ * @param {string}        postData.excerpt    - Raw post excerpt (may contain HTML).
+ * @param {string[]}      postData.tags       - Array of tag name strings.
+ * @param {string[]}      postData.categories - Array of category name strings.
+ * @param {string}        postData.permalink  - Post permalink URL.
  * @return {Promise<string>} Resolves to the fully composed dashboard URL with GET params.
  */
 async function buildDashboardUrl( postId, postData ) {
@@ -148,7 +118,9 @@ async function buildDashboardUrl( postId, postData ) {
  * @return {JSX.Element} The rendered sidebar panel content.
  */
 const QueloraSidebar = () => {
-	const { meta, postId, isPostDirty, postData } = useSelect( ( select ) => {
+	const { editPost } = useDispatch( 'core/editor' );
+
+	const { meta, postId, postData } = useSelect( ( select ) => {
 		const editor = select( 'core/editor' );
 		const core   = select( 'core' );
 		const pid    = editor.getCurrentPostId();
@@ -167,9 +139,8 @@ const QueloraSidebar = () => {
 		} ).filter( Boolean );
 
 		return {
-			meta:        editor.getEditedPostAttribute( 'meta' ) || {},
-			postId:      pid,
-			isPostDirty: editor.isEditedPostDirty(),
+			meta:   editor.getEditedPostAttribute( 'meta' ) || {},
+			postId: pid,
 			postData: {
 				title:      editor.getEditedPostAttribute( 'title' )   || '',
 				excerpt:    editor.getEditedPostAttribute( 'excerpt' )  || '',
@@ -180,14 +151,16 @@ const QueloraSidebar = () => {
 		};
 	}, [] );
 
-	const { editPost } = useDispatch( 'core/editor' );
-
-	const isActive = resolveActiveState( meta, isPostDirty );
+	/**
+	 * The activation state is read directly from the editor store.
+	 * PHP registers `_quelora_active` with `default` set to the global
+	 * `quelora_default_active` option, so unset posts already return the
+	 * correct default from the REST API — no client-side resolution needed.
+	 */
+	const isActive = !! meta._quelora_active;
 
 	/**
 	 * Toggles the `_quelora_active` meta field for the current post.
-	 * Once called, the per-post value takes explicit precedence over
-	 * the global default for the remainder of the editing session.
 	 *
 	 * @return {void}
 	 */
@@ -203,9 +176,9 @@ const QueloraSidebar = () => {
 	/**
 	 * Opens the Quelora embedded dashboard in an isolated popup window.
 	 *
-	 * The popup is opened synchronously (blank URL) within the click handler
-	 * to satisfy browser popup-blocker requirements, then navigated to the
-	 * fully resolved URL once the async node ID and params are ready.
+	 * The popup is opened synchronously (blank URL) to satisfy browser
+	 * popup-blocker requirements, then navigated to the fully resolved URL
+	 * once the async node ID and params are ready.
 	 *
 	 * @return {void}
 	 */
