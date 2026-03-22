@@ -4,7 +4,7 @@
  * Plugin URI: https://www.quelora.org
  * Update URI: https://www.quelora.org/wp-plugin/quelora-wp-integration
  * Description: Advanced distributed community system integration for WordPress. Injects highly optimized ES Modules and CSS via a Sidebar toggle.
- * Version: 4.7.0
+ * Version: 4.7.2
  * Author: Quelora Architecture Team
  * Text Domain: quelora
  *
