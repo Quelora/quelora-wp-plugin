@@ -1,6 +1,6 @@
 {
   "name": "quelora-wp-integration",
-  "version": "4.5.0",
+  "version": "4.7.0",
   "description": "Advanced distributed community system integration for WordPress.",
   "main": "build/index.js",
   "files": [
