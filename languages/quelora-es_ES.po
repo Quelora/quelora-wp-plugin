@@ -1,9 +1,10 @@
+# filepath: languages/quelora-es_ES.po
 msgid ""
 msgstr ""
-"Project-Id-Version: Quelora Integration 3.0.14\n"
+"Project-Id-Version: Quelora Integration 6.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-21 00:00+0000\n"
-"PO-Revision-Date: 2025-03-21 00:00+0000\n"
+"POT-Creation-Date: 2026-03-24 00:00+0000\n"
+"PO-Revision-Date: 2026-03-24 00:00+0000\n"
 "Last-Translator: Quelora Team\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -13,142 +14,367 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Quelora i18n Compiler\n"
 
-#: quelora.php
+#: includes/class-quelora-admin.php
 msgid "Quelora Configuration"
 msgstr "Configuración de Quelora"
 
-#: quelora.php
+#: includes/class-quelora-admin.php
 msgid "Quelora"
 msgstr "Quelora"
 
-#: quelora.php
+#: includes/class-quelora-admin.php
 msgid "Quelora Integration Settings"
 msgstr "Ajustes de Integración de Quelora"
 
-#: quelora.php
-msgid "Enable Quelora by Default"
+#: includes/class-quelora-admin.php
+msgid "Quelora Integration"
+msgstr "Integración de Quelora"
+
+#: includes/class-quelora-admin.php
+msgid "General"
+msgstr "General"
+
+#: includes/class-quelora-admin.php
+msgid "Integration"
+msgstr "Integración"
+
+#: includes/class-quelora-admin.php
+msgid "Active"
+msgstr "Activo"
+
+#: includes/class-quelora-admin.php
+msgid "Assets"
+msgstr "Recursos"
+
+#: includes/class-quelora-admin.php
+msgid "Customisation"
+msgstr "Personalización"
+
+#: includes/class-quelora-admin.php
+msgid "Sync"
+msgstr "Sincronización"
+
+#: includes/class-quelora-admin.php
+msgid "Running"
+msgstr "En ejecución"
+
+#: includes/class-quelora-admin.php
+msgid "Activation"
+msgstr "Activación"
+
+#: includes/class-quelora-admin.php
+msgid "Control whether Quelora is enabled by default across all posts, or must be toggled on per-post from the block editor sidebar."
+msgstr "Controla si Quelora está habilitado por defecto en todas las entradas, o si debe activarse por entrada desde la barra lateral del editor de bloques."
+
+#: includes/class-quelora-admin.php
+msgid "Enable Quelora by default"
 msgstr "Activar Quelora por defecto"
 
-#: quelora.php
-msgid "Activate Quelora on all posts unless explicitly disabled per-post."
-msgstr "Activa Quelora en todas las entradas salvo que se deshabilite explícitamente en cada entrada."
+#: includes/class-quelora-admin.php
+msgid "Quelora assets are injected on every post unless explicitly disabled per-post in the editor sidebar."
+msgstr "Los recursos de Quelora se inyectan en cada entrada a menos que se deshabilite explícitamente en la barra lateral del editor."
 
-#: quelora.php
-msgid "When enabled, Quelora assets are injected on every singular post that has not been explicitly toggled off in the editor sidebar."
-msgstr "Cuando está activo, los recursos de Quelora se inyectan en cada entrada singular que no haya sido desactivada explícitamente en la barra lateral del editor."
+#: includes/class-quelora-admin.php
+msgid "Hide WordPress comments"
+msgstr "Ocultar comentarios de WordPress"
 
-#: quelora.php
-msgid "Dashboard URL (Backend)"
-msgstr "URL del Dashboard (Backend)"
+#: includes/class-quelora-admin.php
+msgid "Suppresses native WordPress comment threads and the reply form when Quelora is active on a post. The #comments container is preserved so Quelora anchors remain reachable."
+msgstr "Suprime los hilos de comentarios nativos de WordPress y el formulario de respuesta cuando Quelora está activo en una entrada. El contenedor #comments se preserva para que los anclajes de Quelora sigan siendo accesibles."
 
-#: quelora.php
-msgid "Base embed URL. The post identifier will be appended automatically (e.g. %s)."
-msgstr "URL base de incrustación. El identificador de la entrada se añadirá automáticamente (p. ej. %s)."
+#: includes/class-quelora-admin.php
+msgid "Placement strategy"
+msgstr "Estrategia de posicionamiento"
 
-#: quelora.php
-msgid "Header Widget Selector"
-msgstr "Selector del Widget de Cabecera"
+#: includes/class-quelora-admin.php
+msgid "The IIFE script always injects interaction-bar anchors client-side (Layer 1). These options control the additional server-side injection via WordPress hooks (Layer 2)."
+msgstr "El script IIFE siempre inyecta anclajes de la barra de interacción en el lado del cliente (Capa 1). Estas opciones controlan la inyección adicional del lado del servidor a través de hooks de WordPress (Capa 2)."
 
-#: quelora.php
-msgid "CSS selector for the header container. Default: %1$s. Injects: %2$s"
-msgstr "Selector CSS del contenedor de cabecera. Por defecto: %1$s. Inyecta: %2$s"
+#: includes/class-quelora-admin.php
+msgid "Both hooks"
+msgstr "Ambos hooks"
 
-#: quelora.php
-msgid "Article Meta Selector"
-msgstr "Selector Meta del Artículo"
+#: includes/class-quelora-admin.php
+msgid "Fires both the_content filter and comment_form_before action. Recommended for most themes."
+msgstr "Ejecuta tanto el filtro the_content como la acción comment_form_before. Recomendado para la mayoría de los temas."
 
-#: quelora.php
-msgid "CSS selector inside each &lt;article&gt;. Default: %1$s. Injects: %2$s"
-msgstr "Selector CSS dentro de cada &lt;article&gt;. Por defecto: %1$s. Inyecta: %2$s"
+#: includes/class-quelora-admin.php
+msgid "Content filter only"
+msgstr "Solo filtro de contenido"
 
-#: quelora.php
-msgid "Asset Source"
-msgstr "Origen de los Assets"
+#: includes/class-quelora-admin.php
+msgid "Appends the anchor at the end of post content via the_content filter."
+msgstr "Añade el anclaje al final del contenido de la entrada a través del filtro the_content."
 
-#: quelora.php
-msgid "Local Package (Included)"
-msgstr "Paquete Local (Incluido)"
+#: includes/class-quelora-admin.php
+msgid "Comment form only"
+msgstr "Solo formulario de comentarios"
 
-#: quelora.php
+#: includes/class-quelora-admin.php
+msgid "Injects the anchor before the WordPress comment form on single posts."
+msgstr "Inyecta el anclaje antes del formulario de comentarios de WordPress en entradas individuales."
+
+#: includes/class-quelora-admin.php
+msgid "IIFE only"
+msgstr "Solo IIFE"
+
+#: includes/class-quelora-admin.php
+msgid "Disables all PHP hooks. The client-side IIFE script is the sole injector."
+msgstr "Deshabilita todos los hooks de PHP. El script IIFE del lado del cliente es el único inyector."
+
+#: includes/class-quelora-admin.php
+msgid "Mount points"
+msgstr "Puntos de montaje"
+
+#: includes/class-quelora-admin.php
+msgid "Configure where Quelora inserts its entry points into your theme's HTML structure."
+msgstr "Configura dónde Quelora inserta sus puntos de entrada en la estructura HTML de tu tema."
+
+#: includes/class-quelora-admin.php
+msgid "Dashboard URL"
+msgstr "URL del Dashboard"
+
+#: includes/class-quelora-admin.php
+msgid "Base embed URL for the Quelora backend dashboard. The post node ID is appended automatically (e.g. %s)."
+msgstr "URL base de incrustación para el dashboard del backend de Quelora. El ID del nodo de la entrada se añade automáticamente (p. ej. %s)."
+
+#: includes/class-quelora-admin.php
+msgid "Header widget selector"
+msgstr "Selector del widget de cabecera"
+
+#: includes/class-quelora-admin.php
+msgid "CSS selector for the header container where Quelora injects %2$s. Default: %1$s."
+msgstr "Selector CSS para el contenedor de la cabecera donde Quelora inyecta %2$s. Por defecto: %1$s."
+
+#: includes/class-quelora-admin.php
+msgid "External session"
+msgstr "Sesión externa"
+
+#: includes/class-quelora-admin.php
+msgid "When enabled, Quelora generates a signed identity token from the current WordPress user and uses it to authenticate with the Quelora backend seamlessly. The Quelora internal authentication circuit (login modal, registration, social providers) is disabled — users are redirected to WordPress' native login page instead."
+msgstr "Cuando está habilitado, Quelora genera un token de identidad firmado a partir del usuario actual de WordPress y lo utiliza para autenticarse con el backend de Quelora sin interrupciones. El circuito de autenticación interno de Quelora (modal de inicio de sesión, registro, proveedores sociales) se deshabilita; los usuarios son redirigidos a la página de inicio de sesión nativa de WordPress."
+
+#: includes/class-quelora-admin.php
+msgid "Enable WordPress SSO"
+msgstr "Habilitar SSO de WordPress"
+
+#: includes/class-quelora-admin.php
+msgid "Only the authenticated user's display name and email address are shared with Quelora. Passwords and session cookies are never transmitted."
+msgstr "Solo el nombre a mostrar y la dirección de correo electrónico del usuario autenticado se comparten con Quelora. Las contraseñas y las cookies de sesión nunca se transmiten."
+
+#: includes/class-quelora-admin.php
+msgid "Token configuration"
+msgstr "Configuración del token"
+
+#: includes/class-quelora-admin.php
+msgid "Configure the HMAC-SHA256 secret and token lifetime used to sign the identity JWT. The secret must match exactly what is set in the Quelora backend for the token to be accepted."
+msgstr "Configura el secreto HMAC-SHA256 y el tiempo de vida del token utilizado para firmar el JWT de identidad. El secreto debe coincidir exactamente con lo configurado en el backend de Quelora para que el token sea aceptado."
+
+#: includes/class-quelora-admin.php
+msgid "Shared secret key"
+msgstr "Clave secreta compartida"
+
+#: includes/class-quelora-admin.php
+msgid "HMAC-SHA256 secret used to sign and verify the SSO JWT. Treat this like a password — never commit it to version control."
+msgstr "Secreto HMAC-SHA256 utilizado para firmar y verificar el JWT del SSO. Trátalo como una contraseña: nunca lo incluyas en el control de versiones."
+
+#: includes/class-quelora-admin.php
+msgid "Token lifetime"
+msgstr "Tiempo de vida del token"
+
+#: includes/class-quelora-admin.php
+msgid "seconds"
+msgstr "segundos"
+
+#: includes/class-quelora-admin.php
+msgid "How long each signed token remains valid. Default: %s (1 hour). The client-side script auto-renews the token 5 minutes before expiry."
+msgstr "Cuánto tiempo permanece válido cada token firmado. Por defecto: %s (1 hora). El script del lado del cliente renueva automáticamente el token 5 minutos antes de que expire."
+
+#: includes/class-quelora-admin.php
+msgid "How it works"
+msgstr "Cómo funciona"
+
+#: includes/class-quelora-admin.php
+msgid "When a logged-in user loads a Quelora-active page, PHP generates a short-lived JWT and injects it directly into the browser's storage before the Quelora module initialises. The module detects the token immediately and authenticates without any redirect or user interaction. When SSO is active, the Quelora SDK's internal login modal and registration flows are suppressed — unauthenticated users are sent to the WordPress login page with a redirect parameter to return them to the exact same post and scroll position."
+msgstr "Cuando un usuario conectado carga una página activa con Quelora, PHP genera un JWT de corta duración y lo inyecta directamente en el almacenamiento del navegador antes de que el módulo de Quelora se inicialice. El módulo detecta el token inmediatamente y se autentica sin ninguna redirección o interacción del usuario. Cuando el SSO está activo, el modal de inicio de sesión interno del SDK de Quelora y los flujos de registro se suprimen; los usuarios no autenticados son enviados a la página de inicio de sesión de WordPress con un parámetro de redirección para devolverlos a la misma entrada y posición de desplazamiento."
+
+#: includes/class-quelora-admin.php
+msgid "Asset source"
+msgstr "Fuente de recursos"
+
+#: includes/class-quelora-admin.php
+msgid "Choose whether to load the Quelora JS and CSS from the bundled local copy or from an external CDN. The local option is recommended for air-gapped or staging environments; the CDN option ensures you always serve the latest optimised build."
+msgstr "Elige si deseas cargar el JS y CSS de Quelora desde la copia local incluida o desde un CDN externo. Se recomienda la opción local para entornos aislados o de pruebas; la opción de CDN asegura que siempre sirvas la última versión optimizada."
+
+#: includes/class-quelora-admin.php
 msgid "External CDN"
 msgstr "CDN Externo"
 
-#: quelora.php
-msgid "CDN JS URL"
-msgstr "URL del JS (CDN)"
+#: includes/class-quelora-admin.php
+msgid "Load assets from the URLs specified below. Best for production — leverages CDN edge caching."
+msgstr "Carga recursos desde las URL especificadas a continuación. Ideal para producción: aprovecha el almacenamiento en caché perimetral del CDN."
 
-#: quelora.php
-msgid "CDN CSS URL"
-msgstr "URL del CSS (CDN)"
+#: includes/class-quelora-admin.php
+msgid "Local package"
+msgstr "Paquete local"
 
-#: quelora.php
-msgid "Configuration Script Payload"
-msgstr "Payload del Script de Configuración"
+#: includes/class-quelora-admin.php
+msgid "Load assets bundled with this plugin. Best for offline or staging environments."
+msgstr "Carga los recursos incluidos con este plugin. Ideal para entornos sin conexión o de pruebas."
 
-#: quelora.php
-msgid "Raw JavaScript injected as an ES Module in the <head>. Only active on posts with Quelora enabled."
-msgstr "JavaScript en bruto inyectado como ES Module en el <head>. Solo activo en entradas con Quelora habilitado."
+#: includes/class-quelora-admin.php
+msgid "CDN URLs"
+msgstr "URLs del CDN"
 
-#: quelora.php
-msgid "Enable WordPress SSO Token"
-msgstr "Habilitar Token SSO de WordPress"
+#: includes/class-quelora-admin.php
+msgid "Override the default CDN endpoints when using a self-hosted or custom CDN distribution."
+msgstr "Anula los endpoints del CDN por defecto al usar una distribución de CDN auto-alojada o personalizada."
 
-#: quelora.php
-msgid "Generate a secure identity token and share it with Quelora for seamless, password-free login."
-msgstr "Genera un token de identidad seguro y lo comparte con Quelora para un inicio de sesión sin contraseña."
+#: includes/class-quelora-admin.php
+msgid "JS bundle URL"
+msgstr "URL del paquete JS"
 
-#: quelora.php
-msgid "When enabled, Quelora receives only the authenticated user's display name and email address from your WordPress site to identify them. User passwords, session cookies, and WordPress credentials are never shared. A cryptographic signature is used to verify each user's identity — Quelora relies exclusively on this signature without accessing or inspecting WordPress sessions. Disable this option to allow Quelora to manage user registration and authentication independently."
-msgstr "Cuando está activo, Quelora recibe únicamente el nombre de usuario y la dirección de correo electrónico del usuario autenticado desde tu sitio WordPress para identificarlo. Las contraseñas, cookies de sesión y credenciales de WordPress nunca se comparten. Se utiliza una firma criptográfica para verificar la identidad de cada usuario — Quelora confía exclusivamente en esta firma sin acceder ni inspeccionar las sesiones de WordPress. Desactiva esta opción para permitir que Quelora gestione el registro y la autenticación de usuarios de forma independiente."
+#: includes/class-quelora-admin.php
+msgid "CSS bundle URL"
+msgstr "URL del paquete CSS"
 
-#: quelora.php
-msgid "SSO Secret Key"
-msgstr "Clave Secreta SSO"
+#: includes/class-quelora-admin.php
+msgid "Configuration script"
+msgstr "Script de configuración"
 
-#: quelora.php
-msgid "HMAC-SHA256 secret used to sign the SSO JWT. Must match the secret configured in the Quelora backend. Leave empty to disable SSO token injection."
-msgstr "Clave secreta HMAC-SHA256 utilizada para firmar el JWT SSO. Debe coincidir con la clave configurada en el backend de Quelora. Déjala vacía para deshabilitar la inyección del token SSO."
+#: includes/class-quelora-admin.php
+msgid "Raw JavaScript injected as an ES Module in the <head> before the Quelora bundle loads. Use this to populate window.QUELORA_CONFIG with your client-specific settings (API URL, login providers, entity selectors, etc.)."
+msgstr "JavaScript puro inyectado como Módulo ES en el <head> antes de que cargue el paquete de Quelora. Úsalo para poblar window.QUELORA_CONFIG con tu configuración específica (URL de la API, proveedores de inicio de sesión, selectores de entidades, etc.)."
 
-#: quelora.php
-msgid "SSO Token TTL (seconds)"
-msgstr "TTL del Token SSO (segundos)"
+#: includes/class-quelora-admin.php
+msgid "This script runs on every page where Quelora is active. When WordPress SSO is enabled, the plugin automatically patches window.QUELORA_CONFIG.login with the external session parameters after this script runs — you do not need to set them manually here."
+msgstr "Este script se ejecuta en cada página donde Quelora está activo. Cuando el SSO de WordPress está habilitado, el plugin parchea automáticamente window.QUELORA_CONFIG.login con los parámetros de sesión externa después de que se ejecute este script; no es necesario configurarlos manualmente aquí."
 
-#: quelora.php
-msgid "How long the SSO token remains valid in seconds. Default: %s (1 hour)."
-msgstr "Tiempo en segundos durante el que el token SSO permanece válido. Por defecto: %s (1 hora)."
+#: includes/class-quelora-admin.php
+msgid "Custom CSS"
+msgstr "CSS Personalizado"
 
+#: includes/class-quelora-admin.php
+msgid "Raw CSS injected in a <style> tag in the <head> on every page where Quelora is active. Use this to override widget styles without modifying theme files."
+msgstr "CSS puro inyectado en una etiqueta <style> en el <head> en cada página donde Quelora está activo. Úsalo para sobrescribir los estilos del widget sin modificar los archivos del tema."
+
+#: includes/class-quelora-admin.php
+msgid "How background sync works"
+msgstr "Cómo funciona la sincronización en segundo plano"
+
+#: includes/class-quelora-admin.php
+msgid "Each sync process runs as a chained WP-Cron job, dispatching batches of %d items. Batches are sent as HTTP POST requests with a JSON body: {\"items\": [...]}. Save endpoint URLs and the API key before triggering a sync."
+msgstr "Cada proceso de sincronización se ejecuta como un trabajo encadenado de WP-Cron, despachando lotes de %d elementos. Los lotes se envían como solicitudes HTTP POST con un cuerpo JSON: {\"items\": [...]}. Guarda las URLs del endpoint y la clave API antes de activar una sincronización."
+
+#: includes/class-quelora-admin.php
+msgid "Authentication"
+msgstr "Autenticación"
+
+#: includes/class-quelora-admin.php
+msgid "Shared API key included as a Bearer token in the Authorization header of all sync requests. Leave blank to send requests without authentication."
+msgstr "Clave API compartida incluida como un token Bearer en el encabezado Authorization de todas las solicitudes de sincronización. Déjalo en blanco para enviar solicitudes sin autenticación."
+
+#: includes/class-quelora-admin.php
+msgid "API Key"
+msgstr "Clave API"
+
+#: includes/class-quelora-admin.php
+msgid "Sent as: Authorization: Bearer {key}. Shared by both the post sync and user sync endpoints."
+msgstr "Enviado como: Authorization: Bearer {key}. Compartido por ambos endpoints de sincronización de entradas y usuarios."
+
+#: includes/class-quelora-admin.php
+msgid "Post Data Sync"
+msgstr "Sincronización de Entradas"
+
+#: includes/class-quelora-admin.php
+msgid "Sends all Quelora-active published posts in batches of %d to the configured endpoint. Each item carries: nodeId, title, description, tags, categories, language, link."
+msgstr "Envía todas las entradas publicadas activas en Quelora en lotes de %d al endpoint configurado. Cada elemento lleva: nodeId, título, descripción, etiquetas, categorías, idioma, enlace."
+
+#: includes/class-quelora-admin.php
+msgid "Endpoint URL"
+msgstr "URL del Endpoint"
+
+#: includes/class-quelora-admin.php
+msgid "Status"
+msgstr "Estado"
+
+#: includes/class-quelora-admin.php
+msgid "Progress"
+msgstr "Progreso"
+
+#: includes/class-quelora-admin.php
+msgid "Last run"
+msgstr "Última ejecución"
+
+#: includes/class-quelora-admin.php
+msgid "Start Post Sync"
+msgstr "Iniciar Sync de Entradas"
+
+#: includes/class-quelora-admin.php
+msgid "Abort Post Sync"
+msgstr "Abortar Sync de Entradas"
+
+#: includes/class-quelora-admin.php
+msgid "User Data Sync"
+msgstr "Sincronización de Usuarios"
+
+#: includes/class-quelora-admin.php
+msgid "Sends all registered WordPress users in batches of %d to the configured endpoint. Each item carries: author (hashed ID), name (login), given_name, family_name, email, picture (avatar URL). Maps directly to the Quelora profileSchema."
+msgstr "Envía a todos los usuarios registrados de WordPress en lotes de %d al endpoint configurado. Cada elemento lleva: autor (ID hash), nombre (login), nombre, apellido, correo, imagen (URL del avatar). Se mapea directamente al profileSchema de Quelora."
+
+#: includes/class-quelora-admin.php
+msgid "Start User Sync"
+msgstr "Iniciar Sync de Usuarios"
+
+#: includes/class-quelora-admin.php
+msgid "Abort User Sync"
+msgstr "Abortar Sync de Usuarios"
+
+#: includes/class-quelora-admin.php
+msgid "Save settings"
+msgstr "Guardar ajustes"
+
+#: build/index.js
 #: src/index.js
 msgid "Quelora Community"
 msgstr "Comunidad Quelora"
 
+#: build/index.js
 #: src/edit.js
 msgid "Quelora Interaction Node"
 msgstr "Nodo de Interacción Quelora"
 
+#: build/index.js
 #: src/edit.js
 msgid "This node is strictly active. The frontend assets and Quelora module configurations will be automatically injected on this page. Configure the interaction mechanics for this specific post directly in the Quelora Distributed Backend."
 msgstr "Este nodo está estrictamente activo. Los recursos del frontend y las configuraciones del módulo Quelora se inyectarán automáticamente en esta página. Configura los mecanismos de interacción para esta entrada directamente en el Backend Distribuido de Quelora."
 
+#: build/index.js
 #: src/edit.js
 msgid "Configure Node in Quelora System"
 msgstr "Configurar Nodo en el Sistema Quelora"
 
+#: build/index.js
 #: src/sidebar.js
 msgid "Enable Quelora"
 msgstr "Activar Quelora"
 
+#: build/index.js
 #: src/sidebar.js
 msgid "Quelora scripts and styles are active for this post."
 msgstr "Los scripts y estilos de Quelora están activos para esta entrada."
 
+#: build/index.js
 #: src/sidebar.js
 msgid "Quelora is disabled for this post."
 msgstr "Quelora está desactivado para esta entrada."
 
+#: build/index.js
 #: src/sidebar.js
 msgid "Configure in Quelora"
 msgstr "Configurar en Quelora"
 
+#: build/index.js
 #: src/sidebar.js
 msgid "Official reference:"
 msgstr "Referencia oficial:"

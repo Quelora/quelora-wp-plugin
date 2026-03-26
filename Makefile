@@ -1,3 +1,5 @@
+# filepath: Makefile
+
 # =============================================================================
 # Quelora Integration — Build & Release Makefile
 # =============================================================================
@@ -108,8 +110,7 @@ _apply-version:
 		fs.writeFileSync('$(PKG_FILE)', JSON.stringify(pkg, null, 2) + '\n'); \
 	"
 	@sed -i "s/^\( \* Version:\s*\).*/\1$(NEW_VERSION)/" $(PHP_FILE)
-	@sed -i "s/^\( \* @version\s*\).*/\1$(NEW_VERSION)/" $(PHP_FILE)
-	@sed -i "s/'version'\s*=>\s*'[0-9]*\.[0-9]*\.[0-9]*'/'version' => '$(NEW_VERSION)'/" $(PHP_FILE)
+	@sed -i "s/^\(define( 'QUELORA_VERSION', '\).*' );/\1$(NEW_VERSION)' );/" $(PHP_FILE)
 	@printf "\033[0;32m✔ Version updated to $(NEW_VERSION) in $(PKG_FILE) and $(PHP_FILE).\033[0m\n"
 
 # =============================================================================
