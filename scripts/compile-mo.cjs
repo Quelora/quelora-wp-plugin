@@ -1,7 +1,8 @@
 /**
  * @file compile-mo.cjs
  * @description Build script to automate the conversion of .po files to .mo binary format.
- * It also generates the necessary JSON files for Gutenberg's i18n implementation.
+ * Generates the necessary JSON (JED) files mapped to specific WordPress script handles
+ * for Gutenberg and SPA i18n implementation.
  * @author Quelora Architecture Team
  */
 
@@ -12,8 +13,20 @@ const gettextParser = require('gettext-parser');
 const languagesDir = path.join(__dirname, '../languages');
 
 /**
- * Compiles .po files to .mo and generates i18n JSON for the editor.
- * * @function compileTranslations
+ * List of registered WordPress script handles that require JavaScript translations.
+ * The compiler will generate a unique JED formatted JSON file for each handle.
+ * @type {string[]}
+ */
+const scriptHandles = [
+    'quelora-admin-spa',
+    'quelora-sidebar'
+];
+
+/**
+ * Compiles .po files to .mo and generates i18n JSON for the React scripts.
+ *
+ * @function compileTranslations
+ * @returns {void}
  */
 function compileTranslations() {
     if (!fs.existsSync(languagesDir)) {
@@ -42,33 +55,40 @@ function compileTranslations() {
         fs.writeFileSync(moFilePath, moBuffer);
         console.log(`Successfully compiled: ${path.basename(moFilePath)}`);
 
-        // 2. Generate the JSON file for Gutenberg (JED format)
-        // This is required for the strings inside our React Sidebar to translate.
+        // 2. Generate the JSON payload for React (JED format)
         const jedData = {
-            'translation-revision-date': po.headers['po-revision-date'],
+            'translation-revision-date': po.headers['po-revision-date'] || '',
             'generator': 'Quelora i18n Compiler',
             'domain': 'quelora',
             'locale_data': {
                 'quelora': {
                     '': {
                         'domain': 'quelora',
-                        'lang': po.headers['language'],
-                        'plural-forms': po.headers['plural-forms']
+                        'lang': po.headers['language'] || '',
+                        'plural-forms': po.headers['plural-forms'] || 'nplurals=2; plural=(n != 1);'
                     }
                 }
             }
         };
 
         // Map translations to JED format
-        Object.keys(po.translations['']).forEach(key => {
-            if (key !== '') {
-                jedData.locale_data.quelora[key] = po.translations[''][key].msgstr;
-            }
-        });
+        if (po.translations && po.translations['']) {
+            Object.keys(po.translations['']).forEach(key => {
+                if (key !== '') {
+                    jedData.locale_data.quelora[key] = po.translations[''][key].msgstr;
+                }
+            });
+        }
 
-        const jsonFilePath = filePath.replace('.po', '-es_ES.json'); // Match WP expected naming
-        fs.writeFileSync(jsonFilePath, JSON.stringify(jedData));
-        console.log(`Generated Gutenberg JSON: ${path.basename(jsonFilePath)}`);
+        // The base name of the .po file, for example 'quelora-es_ES'
+        const baseName = path.basename(file, '.po');
+
+        // 3. Duplicate the JSON file for each required script handle
+        scriptHandles.forEach(handle => {
+            const jsonFilePath = path.join(languagesDir, `${baseName}-${handle}.json`);
+            fs.writeFileSync(jsonFilePath, JSON.stringify(jedData));
+            console.log(`Generated React JSON: ${path.basename(jsonFilePath)}`);
+        });
     });
 }
 

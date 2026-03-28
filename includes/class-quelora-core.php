@@ -7,13 +7,14 @@
  * The core orchestrator class for the Quelora Integration plugin.
  * Responsible for defining all internationalization, public hooks,
  * admin hooks, and delegating execution to specific domain classes.
+ * Features Event-Driven Sync and SPA backend routing.
  *
  * @package Quelora
  */
 class Quelora_Core {
 
 	/**
-	 * @var Quelora_Admin The administrative dashboard and settings manager.
+	 * @var Quelora_Admin The administrative dashboard and SPA settings manager.
 	 */
 	protected $admin;
 
@@ -28,7 +29,7 @@ class Quelora_Core {
 	protected $sso;
 
 	/**
-	 * @var Quelora_Sync The asynchronous synchronization engine.
+	 * @var Quelora_Sync The asynchronous and event-driven synchronization engine.
 	 */
 	protected $sync;
 
@@ -57,8 +58,12 @@ class Quelora_Core {
 
 		// Admin Hooks
 		add_action( 'admin_menu',                             array( $this->admin, 'register_settings_page' ) );
-		add_action( 'admin_init',                             array( $this->admin, 'register_settings' ) );
+		add_action( 'admin_enqueue_scripts',                  array( $this->admin, 'enqueue_admin_assets' ) );
 		add_action( 'enqueue_block_editor_assets',            array( $this->admin, 'inject_editor_assets' ) );
+		add_action( 'wp_ajax_quelora_save_settings',          array( $this->admin, 'ajax_save_settings' ) );
+		add_action( 'wp_ajax_quelora_fetch_config',           array( $this->admin, 'ajax_fetch_config' ) );
+		add_action( 'wp_ajax_quelora_health_check',           array( $this->admin, 'ajax_health_check' ) );
+		add_action( 'wp_ajax_quelora_sync_config',            array( $this->admin, 'ajax_sync_config' ) );
 
 		// Frontend Hooks
 		add_action( 'wp_enqueue_scripts',                     array( $this->frontend, 'inject_frontend_assets' ) );
@@ -72,14 +77,20 @@ class Quelora_Core {
 		// SSO Hooks
 		add_action( 'wp_head',                                array( $this->sso, 'inject_sso_token' ), 15 );
 		add_action( 'wp_ajax_quelora_refresh_token',          array( $this->sso, 'ajax_refresh_token' ) );
+		add_action( 'wp_ajax_nopriv_quelora_refresh_token',   array( $this->sso, 'ajax_refresh_token' ) );
 
-		// Sync Hooks
+		// Sync Hooks - Batch Process
 		add_action( 'quelora_sync_posts_batch',               array( $this->sync, 'process_posts_sync_batch' ) );
 		add_action( 'quelora_sync_users_batch',               array( $this->sync, 'process_users_sync_batch' ) );
 		add_action( 'wp_ajax_quelora_trigger_posts_sync',     array( $this->sync, 'ajax_trigger_posts_sync' ) );
 		add_action( 'wp_ajax_quelora_trigger_users_sync',     array( $this->sync, 'ajax_trigger_users_sync' ) );
 		add_action( 'wp_ajax_quelora_sync_status',            array( $this->sync, 'ajax_get_sync_status' ) );
 		add_action( 'wp_ajax_quelora_abort_sync',             array( $this->sync, 'ajax_abort_sync' ) );
+
+		// Sync Hooks - Event Driven (Real-time)
+		add_action( 'save_post',                              array( $this->sync, 'handle_post_saved' ), 10, 3 );
+		add_action( 'user_register',                          array( $this->sync, 'handle_user_saved' ), 10, 1 );
+		add_action( 'profile_update',                         array( $this->sync, 'handle_user_saved' ), 10, 2 );
 	}
 
 	/**

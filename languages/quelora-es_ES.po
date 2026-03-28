@@ -378,3 +378,286 @@ msgstr "Configurar en Quelora"
 #: src/sidebar.js
 msgid "Official reference:"
 msgstr "Referencia oficial:"
+#: src/admin.js
+msgid "Welcome to Quelora"
+msgstr "Bienvenido a Quelora"
+
+#: src/admin.js
+msgid "Quelora Integration - Quick Setup"
+msgstr "Integración de Quelora - Configuración rápida"
+
+#: src/admin.js
+msgid "Connection String"
+msgstr "Cadena de conexión"
+
+#: src/admin.js
+msgid "Paste your Auto-Configuration String to securely connect your website. If you prefer, you can switch to the manual configuration mode."
+msgstr "Pega tu cadena de autoconfiguración para conectar tu sitio de forma segura. Si lo preferís, podés cambiar al modo de configuración manual."
+
+#: src/admin.js
+msgid "Format: URL:CID:Secret (e.g., https://api-dashboard.quelora.local:QU-XXXXX:MySecret)"
+msgstr "Formato: URL:CID:Secreto (p. ej., https://api-dashboard.quelora.local:QU-XXXXX:MiSecreto)"
+
+#: src/admin.js
+msgid "I prefer manual configuration"
+msgstr "Prefiero la configuración manual"
+
+#: src/admin.js
+msgid "Switch to Auto-Configuration"
+msgstr "Cambiar a autoconfiguración"
+
+#: src/admin.js
+msgid "Complete Setup"
+msgstr "Completar configuración"
+
+#: src/admin.js
+msgid "Configuring..."
+msgstr "Configurando..."
+
+#: src/admin.js
+msgid "Could not securely fetch configuration. Please check your Connection String or use the manual fallback."
+msgstr "No se pudo obtener la configuración de forma segura. Verificá tu cadena de conexión o usá la configuración manual."
+
+#: src/admin.js
+msgid "Invalid Connection String format. Expected format: DashboardURL:CID:Secret"
+msgstr "Formato de cadena de conexión inválido. Formato esperado: URLdashboard:CID:Secreto"
+
+#: src/admin.js
+msgid "General"
+msgstr "General"
+
+#: src/admin.js
+msgid "Activation Controls"
+msgstr "Controles de activación"
+
+#: src/admin.js
+msgid "Enable Quelora by default"
+msgstr "Activar Quelora por defecto"
+
+#: src/admin.js
+msgid "Assets are injected on every post unless disabled per-post."
+msgstr "Los recursos se inyectan en cada entrada salvo que se deshabilite por entrada."
+
+#: src/admin.js
+msgid "Hide WordPress comments"
+msgstr "Ocultar comentarios de WordPress"
+
+#: src/admin.js
+msgid "Suppresses native WordPress comment threads when Quelora is active."
+msgstr "Suprime los hilos de comentarios nativos de WordPress cuando Quelora está activo."
+
+#: src/admin.js
+msgid "Placement Strategy"
+msgstr "Estrategia de posicionamiento"
+
+#: src/admin.js
+msgid "Both hooks (Recommended)"
+msgstr "Ambos hooks (Recomendado)"
+
+#: src/admin.js
+msgid "Content filter only"
+msgstr "Solo filtro de contenido"
+
+#: src/admin.js
+msgid "Comment form only"
+msgstr "Solo formulario de comentarios"
+
+#: src/admin.js
+msgid "IIFE only (No PHP hooks)"
+msgstr "Solo IIFE (Sin hooks PHP)"
+
+#: src/admin.js
+msgid "Mount Points & APIs"
+msgstr "Puntos de montaje y APIs"
+
+#: src/admin.js
+msgid "Frontend Dashboard URL"
+msgstr "URL del dashboard frontend"
+
+#: src/admin.js
+msgid "Base embed URL for the frontend interface."
+msgstr "URL base de incrustación para la interfaz del frontend."
+
+#: src/admin.js
+msgid "Header Widget Selector"
+msgstr "Selector del widget de cabecera"
+
+#: src/admin.js
+msgid "Main API URL"
+msgstr "URL de la API principal"
+
+#: src/admin.js
+msgid "Base URL for the primary Quelora API (e.g., https://api.quelora.local)."
+msgstr "URL base de la API principal de Quelora (p. ej., https://api.quelora.local)."
+
+#: src/admin.js
+msgid "Dashboard API URL"
+msgstr "URL de la API del dashboard"
+
+#: src/admin.js
+msgid "Base URL for Dashboard synchronization (e.g., https://api-dashboard.quelora.local)."
+msgstr "URL base para la sincronización con el dashboard (p. ej., https://api-dashboard.quelora.local)."
+
+#: src/admin.js
+msgid "Endpoint URL"
+msgstr "URL del endpoint"
+
+#: src/admin.js
+msgid "Identity & Security"
+msgstr "Identidad y seguridad"
+
+#: src/admin.js
+msgid "Enable WordPress SSO"
+msgstr "Habilitar SSO de WordPress"
+
+#: src/admin.js
+msgid "Redirects Quelora authentication to the native WordPress login."
+msgstr "Redirige la autenticación de Quelora al inicio de sesión nativo de WordPress."
+
+#: src/admin.js
+msgid "Shared Secret Key"
+msgstr "Clave secreta compartida"
+
+#: src/admin.js
+msgid "The HMAC-SHA256 master secret for authentication."
+msgstr "El secreto maestro HMAC-SHA256 para la autenticación."
+
+#: src/admin.js
+msgid "JWT Secret Key"
+msgstr "Clave JWT secreta"
+
+#: src/admin.js
+msgid "Token Lifetime (seconds)"
+msgstr "Tiempo de vida del token (segundos)"
+
+#: src/admin.js
+msgid "Client ID (CID)"
+msgstr "ID de cliente (CID)"
+
+#: src/admin.js
+msgid "The unique identifier for your Quelora community."
+msgstr "El identificador único de tu comunidad Quelora."
+
+#: src/admin.js
+msgid "Asset Delivery"
+msgstr "Entrega de recursos"
+
+#: src/admin.js
+msgid "Asset Source"
+msgstr "Fuente de recursos"
+
+#: src/admin.js
+msgid "External CDN (Production)"
+msgstr "CDN externo (Producción)"
+
+#: src/admin.js
+msgid "Local Package (Recommended for Staging)"
+msgstr "Paquete local (Recomendado para staging)"
+
+#: src/admin.js
+msgid "JS Bundle URL"
+msgstr "URL del bundle JS"
+
+#: src/admin.js
+msgid "CSS Bundle URL"
+msgstr "URL del bundle CSS"
+
+#: src/admin.js
+msgid "Assets"
+msgstr "Recursos"
+
+#: src/admin.js
+msgid "Customisation"
+msgstr "Personalización"
+
+#: src/admin.js
+msgid "Configuration Payload"
+msgstr "Payload de configuración"
+
+#: src/admin.js
+msgid "The static window.QUELORA_CONFIG object."
+msgstr "El objeto estático window.QUELORA_CONFIG."
+
+#: src/admin.js
+msgid "Injected globally to override Quelora defaults."
+msgstr "Inyectado globalmente para sobreescribir los valores por defecto de Quelora."
+
+#: src/admin.js
+msgid "Configuration File"
+msgstr "Archivo de configuración"
+
+#: src/admin.js
+msgid "Custom CSS"
+msgstr "CSS personalizado"
+
+#: src/admin.js
+msgid "Synchronization"
+msgstr "Sincronización"
+
+#: src/admin.js
+msgid "Post Data Sync"
+msgstr "Sincronización de entradas"
+
+#: src/admin.js
+msgid "User Data Sync"
+msgstr "Sincronización de usuarios"
+
+#: src/admin.js
+msgid "Start Post Sync"
+msgstr "Iniciar sync de entradas"
+
+#: src/admin.js
+msgid "Abort Post Sync"
+msgstr "Abortar sync de entradas"
+
+#: src/admin.js
+msgid "Start User Sync"
+msgstr "Iniciar sync de usuarios"
+
+#: src/admin.js
+msgid "Abort User Sync"
+msgstr "Abortar sync de usuarios"
+
+#: src/admin.js
+msgid "Status:"
+msgstr "Estado:"
+
+#: src/admin.js
+msgid "Processed"
+msgstr "Procesado"
+
+#: src/admin.js
+msgid "Sync initiated successfully."
+msgstr "Sincronización iniciada correctamente."
+
+#: src/admin.js
+msgid "Sync aborted."
+msgstr "Sincronización abortada."
+
+#: src/admin.js
+msgid "Please configure the Shared Secret Key before starting a sync."
+msgstr "Configurá la clave secreta compartida antes de iniciar una sincronización."
+
+#: src/admin.js
+msgid "Diagnostic Tools"
+msgstr "Herramientas de diagnóstico"
+
+#: src/admin.js
+msgid "Test Connection"
+msgstr "Probar conexión"
+
+#: src/admin.js
+msgid "Integration"
+msgstr "Integración"
+
+#: src/admin.js
+msgid "Save Settings"
+msgstr "Guardar ajustes"
+
+#: src/admin.js
+msgid "Saving..."
+msgstr "Guardando..."
+
+#: src/admin.js
+msgid "Settings saved successfully."
+msgstr "Ajustes guardados correctamente."

@@ -92,7 +92,7 @@ function resolveDescription( excerpt, title ) {
 async function buildDashboardUrl( postId, postData ) {
 	const base = (
 		window?.QueloraEditorConfig?.dashboardUrl ||
-		'https://dashboard.quelora.local/embed/post/'
+		'https://dashboard.quelora.local'
 	).replace( /\/$/, '' );
 
 	const nodeId = await toNodeId( `post-${ postId || 0 }` );
@@ -106,7 +106,7 @@ async function buildDashboardUrl( postId, postData ) {
 		link:        postData.permalink || '',
 	} );
 
-	return `${ base }/${ nodeId }?${ params.toString() }`;
+	return `${ base }/embed/post/${ nodeId }?${ params.toString() }`;
 }
 
 /**

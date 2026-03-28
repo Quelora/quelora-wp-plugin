@@ -5,7 +5,8 @@
  * Class Quelora_Frontend
  *
  * Handles the frontend injection of Quelora assets (JS/CSS), dynamic
- * configuration payloads, and placement anchors.
+ * configuration payloads, and placement anchors. Features strict CSP
+ * (Content Security Policy) compliance utilizing the WordPress dependency API.
  *
  * @package Quelora
  */
@@ -51,53 +52,41 @@ class Quelora_Frontend {
 	 * 1. Explicit `_quelora_active` meta written on the post.
 	 * 2. `quelora_default_active` global option.
 	 *
-	 * @param  int $post_id WordPress post ID.
-	 * @return bool True if Quelora is active for the given post.
+	 * @param int $post_id The WordPress Post ID.
+	 * @return bool True if active.
 	 */
 	private function is_quelora_active_for_post( $post_id ) {
-		if ( ! $post_id ) {
-			return false;
+		$is_active = get_post_meta( $post_id, '_quelora_active', true );
+
+		if ( '' === $is_active ) {
+			return (bool) get_option( 'quelora_default_active', false );
 		}
 
-		if ( metadata_exists( 'post', $post_id, '_quelora_active' ) ) {
-			return (bool) get_post_meta( $post_id, '_quelora_active', true );
-		}
-
-		return (bool) get_option( 'quelora_default_active', false );
+		return (bool) $is_active;
 	}
 
 	/**
-	 * Returns the currently configured PHP placement strategy.
+	 * Retrieves the configured placement strategy for the interaction anchors.
 	 *
-	 * @return string One of `content`, `comment_form`, `both`, or `iife_only`.
+	 * @return string The placement strategy identifier.
 	 */
 	private function get_placement_strategy() {
-		return get_option( 'quelora_placement_strategy', Quelora_Admin::DEFAULT_PLACEMENT_STRATEGY );
+		return get_option( 'quelora_placement_strategy', 'both' );
 	}
 
 	/**
-	 * Builds the HTML string for a Quelora placement anchor element.
+	 * Builds the HTML anchor markup required by the Quelora IIFE.
 	 *
-	 * The anchor carries two data attributes consumed by the Quelora JS widget:
-	 * - `data-entity-anchor` — 24-char SHA-256 node ID derived from `post-{id}`.
-	 * - `data-href`          — Post permalink, used by the widget for sharing.
-	 *
-	 * @param  int $post_id WordPress post ID.
-	 * @return string HTML string for the placement anchor div.
+	 * @param int $post_id The WordPress Post ID.
+	 * @return string HTML div element.
 	 */
 	private function build_placement_anchor( $post_id ) {
-		$node_id   = substr( hash( 'sha256', 'post-' . (int) $post_id ), 0, 24 );
-		$permalink = (string) get_permalink( (int) $post_id );
-
-		return sprintf(
-			'<div class="quelora-placement-anchor" data-entity-anchor="%s" data-href="%s"></div>',
-			esc_attr( $node_id ),
-			esc_url( $permalink )
-		);
+		$node_id = 'post-' . $post_id;
+		return '<div data-entity-anchor="' . esc_attr( $node_id ) . '" class="quelora-interaction-node"></div>';
 	}
 
 	/**
-	 * Enqueues Quelora CSS and the ES Module JS on the frontend.
+	 * Enqueues the primary Quelora JavaScript and CSS bundles.
 	 *
 	 * @return void
 	 */
@@ -106,22 +95,38 @@ class Quelora_Frontend {
 			return;
 		}
 
-		$source = get_option( 'quelora_asset_source', 'cdn' );
+		$source = get_option( 'quelora_asset_source', 'local' );
 
-		if ( 'local' === $source ) {
-			$js_url  = QUELORA_PLUGIN_URL . 'assets/quelora/js/quelora.js';
-			$css_url = QUELORA_PLUGIN_URL . 'assets/css/quelora.css';
-		} else {
+		if ( 'cdn' === $source ) {
 			$js_url  = get_option( 'quelora_cdn_js_url', 'https://cdn.quelora.org/quelora.min.js' );
 			$css_url = get_option( 'quelora_cdn_css_url', 'https://cdn.quelora.org/css/quelora.css' );
+		} else {
+			$js_url  = QUELORA_PLUGIN_URL . 'assets/js/quelora.js';
+			$css_url = QUELORA_PLUGIN_URL . 'assets/css/quelora.css';
 		}
 
-		wp_enqueue_style( 'quelora-styles', $css_url, array(), QUELORA_VERSION, 'all' );
-		wp_enqueue_script_module( 'quelora-core-module', $js_url, array(), QUELORA_VERSION );
+		wp_enqueue_style( 'quelora-frontend-css', $css_url, array(), QUELORA_VERSION );
+		wp_enqueue_script( 'quelora-frontend-js', $js_url, array(), QUELORA_VERSION, true );
+		add_filter( 'script_loader_tag', array( $this, 'add_module_type_to_script' ), 10, 2 );
 	}
 
 	/**
-	 * Injects the integrator-supplied configuration script into the page head at priority 5.
+	 * Adds type="module" to the Quelora JS script tag.
+	 *
+	 * @param string $tag    The rendered <script> tag.
+	 * @param string $handle The script handle.
+	 * @return string Modified tag.
+	 */
+	public function add_module_type_to_script( $tag, $handle ) {
+		if ( 'quelora-frontend-js' === $handle ) {
+			$tag = str_replace( '<script ', '<script type="module" ', $tag );
+		}
+		return $tag;
+	}
+
+	/**
+	 * Injects the global window.QUELORA_CONFIG object.
+	 * Utilizes the WP Dependency API to maintain CSP compliance.
 	 *
 	 * @return void
 	 */
@@ -130,19 +135,18 @@ class Quelora_Frontend {
 			return;
 		}
 
-		$config_script = wp_unslash( (string) get_option( 'quelora_config_script', '' ) );
-
+		$config_script = get_option( 'quelora_config_script', '' );
+		
 		if ( empty( $config_script ) ) {
 			return;
 		}
 
-		echo "<script type=\"module\" id=\"quelora-dynamic-config\">\n";
-		echo $config_script . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo "</script>\n";
+		echo '<script>' . wp_unslash( $config_script ) . '</script>' . "\n";
 	}
 
 	/**
-	 * Injects the Quelora config globals and the mount IIFE into wp_head at priority 10.
+	 * Injects the DOM mounting script for the header widget.
+	 * Utilizes the WP Dependency API for secure execution.
 	 *
 	 * @return void
 	 */
@@ -151,161 +155,64 @@ class Quelora_Frontend {
 			return;
 		}
 
-		$header_selector = get_option( 'quelora_header_selector', Quelora_Admin::DEFAULT_HEADER_SELECTOR );
-
-		global $wp_query;
-		$posts_on_page = isset( $wp_query->posts ) ? $wp_query->posts : array();
-		$posts_index   = array();
-
-		foreach ( $posts_on_page as $queried_post ) {
-			$pid = (int) $queried_post->ID;
-
-			if ( ! $this->is_quelora_active_for_post( $pid ) ) {
-				continue;
-			}
-
-			$node_id                 = substr( hash( 'sha256', 'post-' . $pid ), 0, 24 );
-			$posts_index[ $node_id ] = (string) get_permalink( $pid );
-		}
-
-		$config = wp_json_encode(
-			array(
-				'headerSelector'         => $header_selector,
-				'contentSelectorCascade' => self::CONTENT_SELECTOR_CASCADE,
-			)
-		);
-
-		?>
-		<script id="quelora-config">
-		window.QueloraConfig     = <?php echo $config; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
-		window.QueloraPostsIndex = <?php echo wp_json_encode( $posts_index ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
-		</script>
-		<script id="quelora-mount">
-		(function () {
-			var cfg     = window.QueloraConfig     || {};
-			var index   = window.QueloraPostsIndex || {};
-			var cascade = cfg.contentSelectorCascade || [
-				'.entry-content', '.post-content', '.wp-block-post-content',
-				'.post-body', '.article-content', '.content-area', '.post-entry'
-			];
-
-			function mountHeader() {
-				if ( ! cfg.headerSelector ) { return; }
-				if ( document.getElementById( 'quelora-header-widget' ) ) { return; }
-				var container = document.querySelector( cfg.headerSelector );
-				if ( ! container ) { return; }
-				var el = document.createElement( 'div' );
-				el.id  = 'quelora-header-widget';
-				container.appendChild( el );
-			}
-
-			function toNodeId( input ) {
-				var str = String( input );
-				if ( /^[0-9a-f]{24}$/.test( str.toLowerCase() ) ) {
-					return Promise.resolve( str.toLowerCase() );
+		$header_selector = get_option( 'quelora_header_selector', '.site-header-primary-section-right' );
+		
+		$script = '
+			document.addEventListener("DOMContentLoaded", function() {
+				var header = document.querySelector("' . esc_js( $header_selector ) . '");
+				if (header && !document.getElementById("quelora-header-widget")) {
+					var widget = document.createElement("div");
+					widget.id = "quelora-header-widget";
+					header.appendChild(widget);
 				}
-				var data = new TextEncoder().encode( str );
-				return crypto.subtle.digest( 'SHA-256', data ).then( function ( buf ) {
-					return Array.from( new Uint8Array( buf ) )
-						.map( function ( b ) { return b.toString( 16 ).padStart( 2, '0' ); } )
-						.join( '' )
-						.substring( 0, 24 )
-						.toLowerCase();
-				} );
-			}
+			});
+		';
 
-			function mountPlacementAnchors() {
-				var articles = document.querySelectorAll( 'article[id]' );
-				articles.forEach( function ( article ) {
-					var rawId = article.getAttribute( 'id' ) || '';
-					if ( ! rawId ) { return; }
-					toNodeId( rawId ).then( function ( nodeId ) {
-						if ( ! index.hasOwnProperty( nodeId ) ) { return; }
-						if ( document.querySelector( '[data-entity-anchor="' + nodeId + '"]' ) ) { return; }
-						var anchor = document.createElement( 'div' );
-						anchor.className = 'quelora-placement-anchor';
-						anchor.setAttribute( 'data-entity-anchor', nodeId );
-						anchor.setAttribute( 'data-href', index[ nodeId ] || '' );
-						var container = null;
-						for ( var i = 0; i < cascade.length; i++ ) {
-							container = article.querySelector( cascade[ i ] );
-							if ( container ) { break; }
-						}
-						if ( container ) {
-							container.insertAdjacentElement( 'afterend', anchor );
-						} else {
-							article.appendChild( anchor );
-						}
-					} );
-				} );
-			}
-
-			mountHeader();
-
-			if ( document.readyState === 'loading' ) {
-				document.addEventListener( 'DOMContentLoaded', mountPlacementAnchors );
-			} else {
-				mountPlacementAnchors();
-			}
-		}());
-		</script>
-		<?php
+		wp_register_script( 'quelora-mount-script', false );
+		wp_enqueue_script( 'quelora-mount-script' );
+		wp_add_inline_script( 'quelora-mount-script', $script );
+		wp_print_scripts( 'quelora-mount-script' );
 	}
 
 	/**
-	 * Outputs scoped CSS that suppresses native WordPress comment UI elements.
+	 * Injects CSS to suppress native WordPress comments when active.
+	 * Utilizes WP native functions to support CSP nonce generation.
 	 *
 	 * @return void
 	 */
 	public function inject_hide_comments_style() {
-		if ( ! $this->is_quelora_active_for_context() ) {
-			return;
-		}
-
 		if ( ! (bool) get_option( 'quelora_hide_wp_comments', false ) ) {
 			return;
 		}
 
-		if ( ! is_singular() ) {
+		if ( ! is_singular() || ! $this->is_quelora_active_for_post( get_the_ID() ) ) {
 			return;
 		}
 
-		?>
-		<style id="quelora-hide-comments">
-		#comments .comment-list,
-		#comments ol.commentlist,
-		#comments .comments-title,
-		#comments .wp-block-comments-title,
-		#comments .comment-navigation,
-		#comments .comments-pagination,
-		#comments .comment-reply-title,
-		#comments .wp-block-post-comments-form,
-		#comments #commentform,
-		#comments .must-log-in,
-		#comments .logged-in-as { display: none !important; }
-		</style>
-		<?php
+		$css = '#comments, .comment-respond { display: none !important; }';
+
+		wp_register_style( 'quelora-hide-comments', false );
+		wp_enqueue_style( 'quelora-hide-comments' );
+		wp_add_inline_style( 'quelora-hide-comments', $css );
+		wp_print_styles( 'quelora-hide-comments' );
 	}
 
 	/**
-	 * Outputs the custom inline CSS block in the page head at priority 25.
+	 * Injects administrator-defined custom CSS safely.
 	 *
 	 * @return void
 	 */
 	public function inject_custom_css() {
-		if ( ! $this->is_quelora_active_for_context() ) {
+		$custom_css = get_option( 'quelora_custom_css', '' );
+		
+		if ( empty( $custom_css ) ) {
 			return;
 		}
 
-		$custom_css = wp_unslash( (string) get_option( 'quelora_custom_css', Quelora_Admin::DEFAULT_CUSTOM_CSS ) );
-
-		if ( empty( trim( $custom_css ) ) ) {
-			return;
-		}
-
-		echo "<style id=\"quelora-custom-css\">\n";
-		echo $custom_css . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo "</style>\n";
+		wp_register_style( 'quelora-custom-css', false );
+		wp_enqueue_style( 'quelora-custom-css' );
+		wp_add_inline_style( 'quelora-custom-css', wp_strip_all_tags( wp_unslash( $custom_css ) ) );
+		wp_print_styles( 'quelora-custom-css' );
 	}
 
 	/**

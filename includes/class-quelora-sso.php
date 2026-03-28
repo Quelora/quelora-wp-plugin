@@ -46,10 +46,9 @@ class Quelora_SSO {
 		$ttl           = (int) get_option( 'quelora_sso_token_ttl', Quelora_Admin::DEFAULT_TOKEN_TTL );
 		$issued_at     = time();
 		$expires_at    = $issued_at + max( 60, $ttl );
-		$gravatar_hash = md5( strtolower( trim( $user->user_email ) ) );
-		$gravatar_url  = 'https://www.gravatar.com/avatar/' . $gravatar_hash . '?s=96&d=mp&r=g';
-		$author_id     = hash( 'sha256', (string) $user->ID . wp_salt( 'auth' ) );
-		$flags         = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
+		$api_url   = rtrim( trim( (string) get_option( 'quelora_api_url', '' ) ), '/' );
+		$author_id = hash( 'sha256', (string) $user->ID );
+		$flags     = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
 
 		$header = $this->base64url_encode(
 			wp_json_encode( array( 'alg' => 'HS256', 'typ' => 'JWT' ), $flags )
@@ -58,15 +57,17 @@ class Quelora_SSO {
 		$payload = $this->base64url_encode(
 			wp_json_encode(
 				array(
-					'iss'     => get_site_url(),
-					'aud'     => get_option( 'quelora_dashboard_url', Quelora_Admin::DEFAULT_DASHBOARD_URL ),
-					'sub'     => (string) $user->ID,
-					'email'   => $user->user_email,
-					'name'    => $user->display_name,
-					'picture' => $gravatar_url,
-					'author'  => $author_id,
-					'iat'     => $issued_at,
-					'exp'     => $expires_at,
+					'iss'         => $api_url,
+					'sub'         => $author_id,
+					'aud'         => $api_url,
+					'iat'         => $issued_at,
+					'exp'         => $expires_at,
+					'email'       => $user->user_email,
+					'given_name'  => $user->first_name,
+					'family_name' => $user->last_name,
+					'picture'     => get_avatar_url( $user->ID ),
+					'locale'      => get_locale(),
+					'author'      => $author_id,
 				),
 				$flags
 			)
@@ -119,22 +120,36 @@ class Quelora_SSO {
 			var nonce     = <?php echo wp_json_encode( $nonce ); ?>;
 
 			function storeToken( t, exp ) {
-				[ sessionStorage, localStorage ].forEach( function ( s ) {
-					try {
-						s.setItem( 'ql_sso_token',         t );
-						s.setItem( 'ql_sso_token_expires', String( exp ) );
-					} catch (e) {}
-				} );
+				// sessionStorage: raw strings (widget reads via getSessionItem → raw string)
+				try {
+					sessionStorage.setItem( 'ql_sso_token',         t );
+					sessionStorage.setItem( 'ql_sso_token_expires', String( exp ) );
+				} catch (e) {}
+				// localStorage: {value, expiry} envelope (widget reads via getLocalItem → parses envelope)
+				try {
+					localStorage.setItem( 'ql_sso_token',         JSON.stringify( { value: t,           expiry: null } ) );
+					localStorage.setItem( 'ql_sso_token_expires', JSON.stringify( { value: String( exp ), expiry: null } ) );
+				} catch (e) {}
 			}
 
 			function getStoredExpiry() {
-				var stores = [ sessionStorage, localStorage ];
-				for ( var i = 0; i < stores.length; i++ ) {
-					try {
-						var exp = parseInt( stores[ i ].getItem( 'ql_sso_token_expires' ), 10 );
+				// sessionStorage: raw timestamp string
+				try {
+					var raw = sessionStorage.getItem( 'ql_sso_token_expires' );
+					if ( raw ) {
+						var exp = parseInt( raw, 10 );
 						if ( exp > 0 ) { return exp; }
-					} catch (e) {}
-				}
+					}
+				} catch (e) {}
+				// localStorage: {value, expiry} envelope
+				try {
+					var lsRaw = localStorage.getItem( 'ql_sso_token_expires' );
+					if ( lsRaw ) {
+						var parsed = JSON.parse( lsRaw );
+						var lsExp = parseInt( parsed.value, 10 );
+						if ( lsExp > 0 ) { return lsExp; }
+					}
+				} catch (e) {}
 				return 0;
 			}
 
