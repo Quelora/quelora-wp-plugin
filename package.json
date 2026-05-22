@@ -1,0 +1,27 @@
+{
+  "name": "quelora-wp-integration",
+  "version": "14.0.0",
+  "description": "Advanced distributed community system integration for WordPress. Enterprise SPA Architecture.",
+  "main": "build/index.js",
+  "files": [
+    "quelora.php",
+    "uninstall.php",
+    "includes",
+    "build",
+    "assets",
+    "languages"
+  ],
+  "scripts": {
+    "start": "wp-scripts start src/index.js src/admin.js",
+    "build": "wp-scripts build src/index.js src/admin.js",
+    "postbuild": "npm run build:i18n",
+    "build:i18n": "node ./scripts/compile-mo.cjs",
+    "plugin-zip": "wp-scripts plugin-zip"
+  },
+  "author": "Quelora Architecture Team",
+  "license": "GPL-2.0-or-later",
+  "devDependencies": {
+    "@wordpress/scripts": "^27.0.0",
+    "gettext-parser": "^6.0.0"
+  }
+}
